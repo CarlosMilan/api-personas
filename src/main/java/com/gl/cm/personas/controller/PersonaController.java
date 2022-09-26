@@ -18,31 +18,31 @@ public class PersonaController {
     @Autowired
     private PersonaService personaService;
 
-    @GetMapping(name = "/")
+    @GetMapping(value = "/")
     public ResponseEntity<List<Persona>> findAll() {
         List<Persona> personas = personaService.getAll();
         return new ResponseEntity<>(personas, HttpStatus.OK);
     }
 
-    @GetMapping(name = "/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<Persona> findById(@PathVariable(name = "id") UUID id) {
         Persona persona = personaService.findById(id);
         return new ResponseEntity<>(persona, HttpStatus.OK);
     }
 
-    @PostMapping(name = "/")
+    @PostMapping(value = "/")
     public ResponseEntity<Persona> save(@RequestBody PersonaDTO personaDTO) {
         Persona persona = personaService.savePersona(personaDTO);
         return new ResponseEntity<>(persona, HttpStatus.CREATED);
     }
 
-    @PutMapping(name = "/{id}")
+    @PutMapping(value = "/{id}")
     public ResponseEntity<Persona> update(@RequestBody PersonaDTO personaDTO, @PathVariable(name = "id") UUID uuid) {
         Persona persona = personaService.updatePersona(personaDTO, uuid);
         return new ResponseEntity<>(persona, HttpStatus.OK);
     }
 
-    @DeleteMapping(name = "/{id}")
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> delete(@PathVariable(name = "id") UUID id) {
         personaService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);

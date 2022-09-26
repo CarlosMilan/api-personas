@@ -17,4 +17,14 @@ public class PersonaMapper {
 
         return persona;
     }
+
+    public PersonaDTO toPersonaDTO(Persona persona) {
+        PersonaDTO personaDTO = new PersonaDTO();
+        personaDTO.setDni(persona.getDni());
+        personaDTO.setApellido(persona.getApellido());
+        personaDTO.setEmail(persona.getEmail());
+        personaDTO.setNombre(persona.getNombre());
+        personaDTO.setFechaNacimiento(persona.getFechaNacimiento());
+        return personaDTO;
+    }
 }

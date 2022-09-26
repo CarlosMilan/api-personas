@@ -1,12 +1,21 @@
 package com.gl.cm.personas.dto;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 
 public class PersonaDTO {
+
+    @NotNull
     private String dni;
+    @NotNull
     private String nombre;
+    @NotNull
     private String apellido;
+    @NotNull
+    @Pattern(regexp = "^[0-9a-zA-Z.\\-_]+@[0-9a-zA-Z]+(\\.[a-zA-Z]+)+$")
     private String email;
+    @NotNull
     private LocalDate fechaNacimiento;
 
     public String getDni() {
