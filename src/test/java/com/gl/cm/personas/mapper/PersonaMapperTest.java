@@ -32,8 +32,7 @@ public class PersonaMapperTest {
         personaDTO.setNombre("Jhon");
         personaDTO.setApellido("Conor");
 
-        String fecha = "20/03/2003";
-        personaDTO.setFechaNacimiento(LocalDate.parse(fecha, formatter));
+        personaDTO.setFechaNacimiento("20/03/2003");
 
         personaDTO.setDni("20300400");
 
@@ -41,7 +40,7 @@ public class PersonaMapperTest {
         assertEquals("Jhon", personaDTO.getNombre());
         assertEquals("Conor", personaDTO.getApellido());
         assertEquals("20300400", personaDTO.getDni());
-        assertEquals("20/03/2003", formatter.format(personaDTO.getFechaNacimiento()));
+        assertEquals("20/03/2003", personaDTO.getFechaNacimiento());
 
     }
 
@@ -53,8 +52,7 @@ public class PersonaMapperTest {
         personaDTO.setNombre("Jhon");
         personaDTO.setApellido("Conor");
 
-        String fecha = "20/03/2003";
-        personaDTO.setFechaNacimiento(LocalDate.parse(fecha, formatter));
+        personaDTO.setFechaNacimiento("20/03/2003");
 
         personaDTO.setDni("20300400");
 

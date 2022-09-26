@@ -15,8 +15,8 @@ public class PersonaDTO {
     @NotNull
     @Pattern(regexp = "^[0-9a-zA-Z.\\-_]+@[0-9a-zA-Z]+(\\.[a-zA-Z]+)+$")
     private String email;
-    @NotNull
-    private LocalDate fechaNacimiento;
+
+    private String fechaNacimiento;
 
     public String getDni() {
         return dni;
@@ -50,11 +50,11 @@ public class PersonaDTO {
         this.email = email;
     }
 
-    public LocalDate getFechaNacimiento() {
+    public String getFechaNacimiento() {
         return fechaNacimiento;
     }
 
-    public void setFechaNacimiento(LocalDate fechaNacimiento) {
+    public void setFechaNacimiento(String fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
 }

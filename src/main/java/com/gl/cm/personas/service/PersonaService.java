@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
@@ -45,7 +47,8 @@ public class PersonaService {
         persona.setNombre(personaDTO.getNombre());
         persona.setApellido(personaDTO.getApellido());
         persona.setEmail(personaDTO.getEmail());
-        persona.setFechaNacimiento(personaDTO.getFechaNacimiento());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        persona.setFechaNacimiento(LocalDate.parse(personaDTO.getFechaNacimiento(), formatter));
         return personaRepository.saveAndFlush(persona);
     }
 
@@ -53,6 +56,8 @@ public class PersonaService {
     public void delete(UUID id) {
         if (personaRepository.existsById(id)) {
             personaRepository.deleteById(id);
+        } else {
+            throw new PersonaNotFoundException("Persona Not Found");
         }
     }
 

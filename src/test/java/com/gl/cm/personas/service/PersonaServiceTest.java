@@ -95,7 +95,6 @@ public class PersonaServiceTest {
                 () -> assertNotNull(persona),
                 () -> assertEquals(personaDTO.getApellido(), persona.getApellido()),
                 () -> assertEquals(personaDTO.getDni(), persona.getDni()),
-                () -> assertEquals(personaDTO.getFechaNacimiento(), persona.getFechaNacimiento()),
                 () -> assertEquals(personaDTO.getEmail(), persona.getEmail())
         );
 
@@ -121,7 +120,6 @@ public class PersonaServiceTest {
                 () -> assertNotNull(persona),
                 () -> assertEquals(personaDTO.getApellido(), persona.getApellido()),
                 () -> assertEquals(personaDTO.getDni(), persona.getDni()),
-                () -> assertEquals(personaDTO.getFechaNacimiento(), persona.getFechaNacimiento()),
                 () -> assertEquals(personaDTO.getEmail(), persona.getEmail())
         );
         verify(personaRepository).saveAndFlush(any());

@@ -4,6 +4,9 @@ import com.gl.cm.personas.dto.PersonaDTO;
 import com.gl.cm.personas.model.Persona;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 @Component
 public class PersonaMapper {
 
@@ -13,7 +16,8 @@ public class PersonaMapper {
         persona.setNombre(personaDTO.getNombre());
         persona.setApellido(personaDTO.getApellido());
         persona.setEmail(personaDTO.getEmail());
-        persona.setFechaNacimiento(personaDTO.getFechaNacimiento());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        persona.setFechaNacimiento(LocalDate.parse(personaDTO.getFechaNacimiento(), formatter));
 
         return persona;
     }
@@ -24,7 +28,8 @@ public class PersonaMapper {
         personaDTO.setApellido(persona.getApellido());
         personaDTO.setEmail(persona.getEmail());
         personaDTO.setNombre(persona.getNombre());
-        personaDTO.setFechaNacimiento(persona.getFechaNacimiento());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        personaDTO.setFechaNacimiento(formatter.format(persona.getFechaNacimiento()));
         return personaDTO;
     }
 }

@@ -21,7 +21,7 @@ public class DatosPersonas {
         persona.setApellido("Conor");
 
         String fecha = "20/03/2003";
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyy");
         persona.setFechaNacimiento(LocalDate.parse(fecha, formatter));
 
         persona.setDni("20300400");
@@ -38,9 +38,7 @@ public class DatosPersonas {
         personaDTO.setNombre("Jhon");
         personaDTO.setApellido("Conor");
 
-        String fecha = "20/03/2003";
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        personaDTO.setFechaNacimiento(LocalDate.parse(fecha, formatter));
+        personaDTO.setFechaNacimiento("20/03/2003");
 
         personaDTO.setDni("20300400");
 
