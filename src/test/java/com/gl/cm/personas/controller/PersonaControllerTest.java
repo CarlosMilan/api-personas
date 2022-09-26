@@ -100,7 +100,6 @@ public class PersonaControllerTest {
     @Test
     @DisplayName("Borrar Persona")
     void deletePersona() throws Exception {
-        PersonaDTO personaDTO = DatosPersonas.createPersonaDTO1();
         when(personaRepository.existsById(UUID.fromString("c2654c34-3dad-11ed-b878-0242ac120002"))).thenReturn(true);
 
         mvc.perform(delete("/personas/c2654c34-3dad-11ed-b878-0242ac120002"))

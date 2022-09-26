@@ -147,4 +147,27 @@ public class PersonaServiceTest {
         verify(personaRepository).findById(any());
     }
 
+    @Test
+    @DisplayName("Borrar persona")
+    void deletePersona() {
+        when(personaRepository.existsById(any())).thenReturn(true);
+
+        personaService.delete(UUID.fromString("c2654c34-3dad-11ed-b878-0242ac120002"));
+        verify(personaRepository).deleteById(any());
+    }
+
+    @Test
+    @DisplayName("Borrar persona No existente")
+    void deletePersonaNoExiste() {
+        when(personaRepository.existsById(any())).thenReturn(false);
+
+        PersonaNotFoundException ex = assertThrows(PersonaNotFoundException.class, () ->
+                personaService.delete(UUID.fromString("c2654c34-3dad-11ed-b878-0242ac120002")));
+
+        assertEquals("Persona Not Found", ex.getMessage());
+        verify(personaRepository).existsById(any());
+        verify(personaRepository, never()).deleteById(any());
+    }
+
+
 }
