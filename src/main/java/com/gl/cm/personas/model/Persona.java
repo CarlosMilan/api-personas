@@ -25,6 +25,14 @@ public class Persona {
     private LocalDateTime creacion;
     private Boolean activo;
 
+    @PrePersist
+    private void prePersist() {
+        if (this.activo == null)
+            this.activo = true;
+        if (this.creacion == null)
+            this.creacion = LocalDateTime.now();
+    }
+
     public UUID getId() {
         return id;
     }
