@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,13 +34,13 @@ public class PersonaController {
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Persona> save(@RequestBody PersonaDTO personaDTO) {
+    public ResponseEntity<Persona> save(@Valid @RequestBody PersonaDTO personaDTO) {
         Persona persona = personaService.savePersona(personaDTO);
         return new ResponseEntity<>(persona, HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Persona> update(@RequestBody PersonaDTO personaDTO, @PathVariable(name = "id") String uuid) {
+    public ResponseEntity<Persona> update(@Valid @RequestBody PersonaDTO personaDTO, @PathVariable(name = "id") String uuid) {
         Persona persona = personaService.updatePersona(personaDTO, UUID.fromString(uuid));
         return new ResponseEntity<>(persona, HttpStatus.OK);
     }

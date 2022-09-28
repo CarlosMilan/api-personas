@@ -10,44 +10,45 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
 @RestController
 @RequestMapping(value = &quot;/personas&quot;)
-<span class="fc" id="L18">public class PersonaController {</span>
+<span class="fc" id="L19">public class PersonaController {</span>
 
     @Autowired
     private PersonaService personaService;
 
     @GetMapping()
     public ResponseEntity&lt;List&lt;Persona&gt;&gt; findAll() {
-<span class="fc" id="L25">        List&lt;Persona&gt; personas = personaService.getAll();</span>
-<span class="fc" id="L26">        return new ResponseEntity&lt;&gt;(personas, HttpStatus.OK);</span>
+<span class="fc" id="L26">        List&lt;Persona&gt; personas = personaService.getAll();</span>
+<span class="fc" id="L27">        return new ResponseEntity&lt;&gt;(personas, HttpStatus.OK);</span>
     }
 
     @GetMapping(value = &quot;/{id}&quot;, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity&lt;Persona&gt; findById(@PathVariable(name = &quot;id&quot;) String id) {
-<span class="fc" id="L31">        Persona persona = personaService.findById(UUID.fromString(id));</span>
-<span class="fc" id="L32">        return new ResponseEntity&lt;&gt;(persona, HttpStatus.OK);</span>
+<span class="fc" id="L32">        Persona persona = personaService.findById(UUID.fromString(id));</span>
+<span class="fc" id="L33">        return new ResponseEntity&lt;&gt;(persona, HttpStatus.OK);</span>
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity&lt;Persona&gt; save(@RequestBody PersonaDTO personaDTO) {
-<span class="fc" id="L37">        Persona persona = personaService.savePersona(personaDTO);</span>
-<span class="fc" id="L38">        return new ResponseEntity&lt;&gt;(persona, HttpStatus.CREATED);</span>
+    public ResponseEntity&lt;Persona&gt; save(@Valid @RequestBody PersonaDTO personaDTO) {
+<span class="fc" id="L38">        Persona persona = personaService.savePersona(personaDTO);</span>
+<span class="fc" id="L39">        return new ResponseEntity&lt;&gt;(persona, HttpStatus.CREATED);</span>
     }
 
     @PutMapping(value = &quot;/{id}&quot;)
-    public ResponseEntity&lt;Persona&gt; update(@RequestBody PersonaDTO personaDTO, @PathVariable(name = &quot;id&quot;) String uuid) {
-<span class="fc" id="L43">        Persona persona = personaService.updatePersona(personaDTO, UUID.fromString(uuid));</span>
-<span class="fc" id="L44">        return new ResponseEntity&lt;&gt;(persona, HttpStatus.OK);</span>
+    public ResponseEntity&lt;Persona&gt; update(@Valid @RequestBody PersonaDTO personaDTO, @PathVariable(name = &quot;id&quot;) String uuid) {
+<span class="fc" id="L44">        Persona persona = personaService.updatePersona(personaDTO, UUID.fromString(uuid));</span>
+<span class="fc" id="L45">        return new ResponseEntity&lt;&gt;(persona, HttpStatus.OK);</span>
     }
 
     @DeleteMapping(value = &quot;/{id}&quot;)
     public ResponseEntity&lt;?&gt; delete(@PathVariable(name = &quot;id&quot;) String id) {
-<span class="fc" id="L49">        personaService.delete(UUID.fromString(id));</span>
-<span class="fc" id="L50">        return new ResponseEntity&lt;&gt;(HttpStatus.OK);</span>
+<span class="fc" id="L50">        personaService.delete(UUID.fromString(id));</span>
+<span class="fc" id="L51">        return new ResponseEntity&lt;&gt;(HttpStatus.OK);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

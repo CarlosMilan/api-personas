@@ -26,7 +26,7 @@ public class Persona {
     private Boolean activo;
 
     @PrePersist
-    private void prePersist() {
+    protected void prePersist() {
         if (this.activo == null)
             this.activo = true;
         if (this.creacion == null)

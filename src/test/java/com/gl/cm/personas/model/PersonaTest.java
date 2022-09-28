@@ -34,4 +34,15 @@ public class PersonaTest {
         assertNull(persona.getCreacion());
         assertNull(persona.getId());
     }
+
+    @Test
+    @DisplayName("Metodo Pre persist")
+    void prePersistTest() {
+        Persona persona = new Persona();
+        persona.prePersist();
+
+        assertEquals(true, persona.getActivo());
+        assertNotNull(persona.getCreacion());
+
+    }
 }

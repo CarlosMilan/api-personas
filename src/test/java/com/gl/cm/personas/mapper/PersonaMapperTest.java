@@ -1,5 +1,6 @@
 package com.gl.cm.personas.mapper;
 
+import com.gl.cm.personas.dto.ErrorDTO;
 import com.gl.cm.personas.dto.PersonaDTO;
 import com.gl.cm.personas.model.Persona;
 import org.junit.jupiter.api.BeforeEach;
@@ -7,10 +8,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Persona Mapper")
 public class PersonaMapperTest {
@@ -41,6 +42,26 @@ public class PersonaMapperTest {
         assertEquals("Conor", personaDTO.getApellido());
         assertEquals("20300400", personaDTO.getDni());
         assertEquals("20/03/2003", personaDTO.getFechaNacimiento());
+
+    }
+
+    @Test
+    @DisplayName("Creacion ErrorDTO")
+    void errorDTOCreacionTest() {
+        ErrorDTO errorDTO = new ErrorDTO(400, "Persona Not Found");
+
+        assertEquals(400, errorDTO.getCodigo());
+        assertEquals("Persona Not Found", errorDTO.getMensaje());
+        assertNotNull(errorDTO.getFecha());
+
+        errorDTO.setCodigo(500);
+        errorDTO.setMensaje("Internal Server Error");
+
+        errorDTO.setFecha(LocalDateTime.now());
+
+        assertEquals("Internal Server Error", errorDTO.getMensaje());
+        assertEquals(500, errorDTO.getCodigo());
+        assertNotNull(errorDTO.getFecha());
 
     }
 

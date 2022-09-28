@@ -26,12 +26,12 @@ import java.util.UUID;
     private Boolean activo;
 
     @PrePersist
-    private void prePersist() {
-<span class="nc bnc" id="L30" title="All 2 branches missed.">        if (this.activo == null)</span>
-<span class="nc" id="L31">            this.activo = true;</span>
-<span class="nc bnc" id="L32" title="All 2 branches missed.">        if (this.creacion == null)</span>
-<span class="nc" id="L33">            this.creacion = LocalDateTime.now();</span>
-<span class="nc" id="L34">    }</span>
+    protected void prePersist() {
+<span class="pc bpc" id="L30" title="1 of 2 branches missed.">        if (this.activo == null)</span>
+<span class="fc" id="L31">            this.activo = true;</span>
+<span class="pc bpc" id="L32" title="1 of 2 branches missed.">        if (this.creacion == null)</span>
+<span class="fc" id="L33">            this.creacion = LocalDateTime.now();</span>
+<span class="fc" id="L34">    }</span>
 
     public UUID getId() {
 <span class="fc" id="L37">        return id;</span>

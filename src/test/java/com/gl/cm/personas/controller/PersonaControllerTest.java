@@ -3,21 +3,20 @@ package com.gl.cm.personas.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gl.cm.personas.DatosPersonas;
 import com.gl.cm.personas.dto.PersonaDTO;
+import com.gl.cm.personas.exception.PersonaNotFoundException;
 import com.gl.cm.personas.repository.PersonaRepository;
 import com.gl.cm.personas.service.PersonaService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.hamcrest.Matchers;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.io.IOException;
 import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -74,6 +73,29 @@ public class PersonaControllerTest {
     }
 
     @Test
+    @DisplayName("Obtener persona No existente")
+    void getPersonaNotFound() throws Exception{
+        when(personaService.findById(any())).thenThrow(new PersonaNotFoundException("Persona Not Found"));
+
+        mvc.perform(get("/personas/c2654c34-3dad-11ed-b878-0242ac120002").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo").value(400))
+                .andExpect(jsonPath("$.mensaje").value("Persona Not Found"));
+    }
+
+    @Test
+    @DisplayName("Obtener persona Lanza Exception")
+    void getPersonaThrowException() throws Exception{
+
+        mvc.perform(get("/personas/c2654c34").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInternalServerError())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo").value(500))
+                .andExpect(jsonPath("$.mensaje").value("Invalid UUID string: c2654c34"));
+    }
+
+    @Test
     @DisplayName("Guardar Persona")
     void savePersona() throws Exception {
         PersonaDTO personaDTO = DatosPersonas.createPersonaDTO1();
@@ -98,12 +120,38 @@ public class PersonaControllerTest {
     }
 
     @Test
+    @DisplayName("Actualizar Persona no existente")
+    void updatePersonaNotFound() throws Exception{
+        PersonaDTO personaDTO = DatosPersonas.createPersonaDTO1();
+        when(personaService.updatePersona(any(), any())).thenThrow(new PersonaNotFoundException("Persona not found"));
+
+        mvc.perform(put("/personas/c2654c34-3dad-11ed-b878-0242ac120002").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(personaDTO)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo").value(400))
+                .andExpect(jsonPath("$.mensaje").value("Persona not found"));
+    }
+
+    @Test
     @DisplayName("Borrar Persona")
     void deletePersona() throws Exception {
         when(personaRepository.existsById(UUID.fromString("c2654c34-3dad-11ed-b878-0242ac120002"))).thenReturn(true);
 
         mvc.perform(delete("/personas/c2654c34-3dad-11ed-b878-0242ac120002"))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("Borrar Persona no existente")
+    void deletePersonaNotFound() throws Exception {
+        doThrow(new PersonaNotFoundException("Persona not found"))
+                .when(personaService).delete(any());
+
+        mvc.perform(delete("/personas/c2654c34-3dad-11ed-b878-0242ac120002"))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.codigo").value(400))
+                .andExpect(jsonPath("$.mensaje").value("Persona not found"));
     }
 
 }
