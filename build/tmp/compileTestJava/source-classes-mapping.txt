@@ -1,0 +1,12 @@
+com/gl/cm/personas/PersonasApplicationTests.java
+ com.gl.cm.personas.PersonasApplicationTests
+com/gl/cm/personas/service/PersonaServiceTest.java
+ com.gl.cm.personas.service.PersonaServiceTest
+com/gl/cm/personas/DatosPersonas.java
+ com.gl.cm.personas.DatosPersonas
+com/gl/cm/personas/mapper/PersonaMapperTest.java
+ com.gl.cm.personas.mapper.PersonaMapperTest
+com/gl/cm/personas/controller/PersonaControllerTest.java
+ com.gl.cm.personas.controller.PersonaControllerTest
+com/gl/cm/personas/model/PersonaTest.java
+ com.gl.cm.personas.model.PersonaTest
