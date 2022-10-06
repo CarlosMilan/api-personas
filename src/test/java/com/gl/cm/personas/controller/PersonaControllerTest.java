@@ -5,7 +5,7 @@ import com.gl.cm.personas.DatosPersonas;
 import com.gl.cm.personas.dto.PersonaDTO;
 import com.gl.cm.personas.exception.PersonaNotFoundException;
 import com.gl.cm.personas.repository.PersonaRepository;
-import com.gl.cm.personas.service.PersonaService;
+import com.gl.cm.personas.service.PersonaServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,6 @@ import org.hamcrest.Matchers;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.io.IOException;
 import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -25,13 +24,13 @@ import static org.mockito.Mockito.*;
 
 @DisplayName("Persona Controller Test")
 @WebMvcTest(controllers = PersonaController.class)
-public class PersonaControllerTest {
+class PersonaControllerTest {
 
     @Autowired
     private MockMvc mvc;
 
     @MockBean
-    private PersonaService personaService;
+    private PersonaServiceImpl personaService;
 
     @MockBean
     private PersonaRepository personaRepository;
@@ -47,7 +46,7 @@ public class PersonaControllerTest {
     @Test
     @DisplayName("Lista de Personas")
     void getPersonas() throws Exception {
-        when(personaService.getAll()).thenReturn(DatosPersonas.createPersonasList());
+        when(personaService.getAll()).thenReturn(DatosPersonas.createPersonasDTOList());
 
         mvc.perform(get("/personas").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -62,7 +61,7 @@ public class PersonaControllerTest {
     @Test
     @DisplayName("Obtener Personas")
     void getPersona() throws Exception {
-        when(personaService.findById(any())).thenReturn(DatosPersonas.createPersona1().get());
+        when(personaService.findById(any())).thenReturn(DatosPersonas.createPersonaDTO1());
 
         mvc.perform(get("/personas/c2654c34-3dad-11ed-b878-0242ac120002").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -99,7 +98,7 @@ public class PersonaControllerTest {
     @DisplayName("Guardar Persona")
     void savePersona() throws Exception {
         PersonaDTO personaDTO = DatosPersonas.createPersonaDTO1();
-        when(personaService.savePersona(any())).thenReturn(DatosPersonas.createPersona1().get());
+        when(personaService.savePersona(any())).thenReturn(DatosPersonas.createPersonaDTO1());
 
         mvc.perform(post("/personas").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(personaDTO)))
                 .andExpect(status().isCreated())
@@ -111,9 +110,9 @@ public class PersonaControllerTest {
     @DisplayName("Editar Persona")
     void updatePersona() throws Exception {
         PersonaDTO personaDTO = DatosPersonas.createPersonaDTO1();
-        when(personaService.updatePersona(any(), any())).thenReturn(DatosPersonas.createPersona1().get());
+        when(personaService.updatePersona(any())).thenReturn(DatosPersonas.createPersonaDTO1());
 
-        mvc.perform(put("/personas/c2654c34-3dad-11ed-b878-0242ac120002").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(personaDTO)))
+        mvc.perform(put("/personas").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(personaDTO)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.nombre").value("Jhon"));
@@ -123,9 +122,9 @@ public class PersonaControllerTest {
     @DisplayName("Actualizar Persona no existente")
     void updatePersonaNotFound() throws Exception{
         PersonaDTO personaDTO = DatosPersonas.createPersonaDTO1();
-        when(personaService.updatePersona(any(), any())).thenThrow(new PersonaNotFoundException("Persona not found"));
+        when(personaService.updatePersona(any())).thenThrow(new PersonaNotFoundException("Persona not found"));
 
-        mvc.perform(put("/personas/c2654c34-3dad-11ed-b878-0242ac120002").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(personaDTO)))
+        mvc.perform(put("/personas").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(personaDTO)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo").value(400))

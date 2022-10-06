@@ -2,7 +2,6 @@ package com.gl.cm.personas.controller;
 
 
 import com.gl.cm.personas.dto.PersonaDTO;
-import com.gl.cm.personas.model.Persona;
 import com.gl.cm.personas.service.PersonaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,35 +17,39 @@ import java.util.UUID;
 @RequestMapping(value = "/personas")
 public class PersonaController {
 
+    private final PersonaService personaService;
+
     @Autowired
-    private PersonaService personaService;
+    public PersonaController(PersonaService personaService) {
+        this.personaService = personaService;
+    }
 
     @GetMapping()
-    public ResponseEntity<List<Persona>> findAll() {
-        List<Persona> personas = personaService.getAll();
+    public ResponseEntity<List<PersonaDTO>> findAll() {
+        List<PersonaDTO> personas = personaService.getAll();
         return new ResponseEntity<>(personas, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Persona> findById(@PathVariable(name = "id") String id) {
-        Persona persona = personaService.findById(UUID.fromString(id));
+    public ResponseEntity<PersonaDTO> findById(@PathVariable(name = "id") String id) {
+        PersonaDTO persona = personaService.findById(UUID.fromString(id));
         return new ResponseEntity<>(persona, HttpStatus.OK);
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Persona> save(@Valid @RequestBody PersonaDTO personaDTO) {
-        Persona persona = personaService.savePersona(personaDTO);
+    public ResponseEntity<PersonaDTO> save(@Valid @RequestBody PersonaDTO personaDTO) {
+        PersonaDTO persona = personaService.savePersona(personaDTO);
         return new ResponseEntity<>(persona, HttpStatus.CREATED);
     }
 
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<Persona> update(@Valid @RequestBody PersonaDTO personaDTO, @PathVariable(name = "id") String uuid) {
-        Persona persona = personaService.updatePersona(personaDTO, UUID.fromString(uuid));
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<PersonaDTO> update(@Valid @RequestBody PersonaDTO personaDTO) {
+        PersonaDTO persona = personaService.updatePersona(personaDTO);
         return new ResponseEntity<>(persona, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<?> delete(@PathVariable(name = "id") String id) {
+    public ResponseEntity<Void> delete(@PathVariable(name = "id") String id) {
         personaService.delete(UUID.fromString(id));
         return new ResponseEntity<>(HttpStatus.OK);
     }

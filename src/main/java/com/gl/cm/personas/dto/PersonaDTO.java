@@ -1,10 +1,13 @@
 package com.gl.cm.personas.dto;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import java.util.List;
+import java.util.UUID;
 
 public class PersonaDTO {
 
+    private UUID id;
     @NotNull
     private String dni;
     @NotNull
@@ -12,10 +15,28 @@ public class PersonaDTO {
     @NotNull
     private String apellido;
     @NotNull
-    @Pattern(regexp = "^[0-9a-zA-Z.\\-_]+@[0-9a-zA-Z]+(\\.[a-zA-Z]+)+$")
+    @Email(regexp = ".+@.+\\..+")
     private String email;
 
     private String fechaNacimiento;
+
+    private List<DireccionDTO> direcciones;
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public List<DireccionDTO> getDirecciones() {
+        return direcciones;
+    }
+
+    public void setDirecciones(List<DireccionDTO> direcciones) {
+        this.direcciones = direcciones;
+    }
 
     public String getDni() {
         return dni;
@@ -56,4 +77,5 @@ public class PersonaDTO {
     public void setFechaNacimiento(String fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
+
 }

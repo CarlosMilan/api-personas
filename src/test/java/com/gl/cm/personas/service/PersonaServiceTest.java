@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +24,7 @@ import static org.mockito.Mockito.*;
 
 @DisplayName("Persona Service")
 @SpringBootTest
-public class PersonaServiceTest {
+class PersonaServiceTest {
 
     @MockBean
     private PersonaRepository personaRepository;
@@ -31,25 +32,18 @@ public class PersonaServiceTest {
     @Autowired
     private PersonaService personaService;
 
-    private DateTimeFormatter formatter;
-
-    @BeforeEach
-    void initTests() {
-        this.formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    }
-
     @Test
     @DisplayName("Obtener Lista de personas")
     void getPersonas() {
         when(personaRepository.findAll()).thenReturn(DatosPersonas.createPersonasList());
 
-        List<Persona> personas = personaService.getAll();
+        List<PersonaDTO> personas = personaService.getAll();
 
         assertNotNull(personas);
         assertEquals(3, personas.size());
         assertEquals("Martin", personas.get(1).getNombre());
         assertEquals("pedro@correo.com", personas.get(2).getEmail());
-        assertEquals("20/03/2003", formatter.format(personas.get(0).getFechaNacimiento()));
+        assertEquals("20-03-2003", personas.get(0).getFechaNacimiento());
 
         verify(personaRepository).findAll();
     }
@@ -60,13 +54,12 @@ public class PersonaServiceTest {
         when(personaRepository.findById(UUID.fromString("c2654c34-3dad-11ed-b878-0242ac120002")))
                 .thenReturn(DatosPersonas.createPersona1());
 
-        Persona persona = personaService.findById(UUID.fromString("c2654c34-3dad-11ed-b878-0242ac120002"));
+        PersonaDTO persona = personaService.findById(UUID.fromString("c2654c34-3dad-11ed-b878-0242ac120002"));
 
         assertNotNull(persona);
         assertEquals("Jhon", persona.getNombre());
         assertEquals("20300400", persona.getDni());
-        assertEquals("20/03/2003", formatter.format(persona.getFechaNacimiento()));
-        assertTrue(persona.getActivo());
+        assertEquals("20-03-2003", persona.getFechaNacimiento());
 
         verify(personaRepository).findById(any());
     }
@@ -89,7 +82,7 @@ public class PersonaServiceTest {
 
         when(personaRepository.saveAndFlush(any())).thenReturn(DatosPersonas.createPersona1().get());
 
-        Persona persona = personaService.savePersona(personaDTO);
+        PersonaDTO persona = personaService.savePersona(personaDTO);
 
         assertAll(
                 () -> assertNotNull(persona),
@@ -105,7 +98,7 @@ public class PersonaServiceTest {
     @Test
     @DisplayName("Editar Persona")
     void updatePersona() {
-        when(personaRepository.findById(any())).thenReturn(DatosPersonas.createPersona1());
+        when(personaRepository.existsById(any())).thenReturn(true);
         when(personaRepository.saveAndFlush(any(Persona.class))).then(invocation -> {
             Persona p = invocation.getArgument(0);
             p.setEmail("test01@email.com");
@@ -114,7 +107,7 @@ public class PersonaServiceTest {
 
         PersonaDTO personaDTO = DatosPersonas.createPersonaDTO1();
         personaDTO.setEmail("test01@email.com");
-        Persona persona = personaService.updatePersona(personaDTO, UUID.fromString("c2654c34-3dad-11ed-b878-0242ac120002"));
+        PersonaDTO persona = personaService.updatePersona(personaDTO);
 
         assertAll(
                 () -> assertNotNull(persona),
@@ -123,7 +116,7 @@ public class PersonaServiceTest {
                 () -> assertEquals(personaDTO.getEmail(), persona.getEmail())
         );
         verify(personaRepository).saveAndFlush(any());
-        verify(personaRepository).findById(any());
+        verify(personaRepository).existsById(any());
     }
 
     @Test
@@ -139,12 +132,12 @@ public class PersonaServiceTest {
         PersonaDTO personaDTO = DatosPersonas.createPersonaDTO1();
         personaDTO.setEmail("test01@email.com");
         PersonaNotFoundException ex = assertThrows(PersonaNotFoundException.class, () ->
-                personaService.updatePersona(personaDTO, UUID.fromString("c2654c34-3dad-11ed-b878-0242ac120002")));
+                personaService.updatePersona(personaDTO));
 
         assertEquals("Persona not found", ex.getMessage());
 
         verify(personaRepository, never()).saveAndFlush(any());
-        verify(personaRepository).findById(any());
+        verify(personaRepository).existsById(any());
     }
 
     @Test

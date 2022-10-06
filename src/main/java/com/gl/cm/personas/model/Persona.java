@@ -1,10 +1,12 @@
 package com.gl.cm.personas.model;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -21,9 +23,14 @@ public class Persona {
     private String nombre;
     private String apellido;
     private String email;
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    @Column(name = "fecha_nacimiento")
     private LocalDate fechaNacimiento;
     private LocalDateTime creacion;
     private Boolean activo;
+
+    @OneToMany(mappedBy = "persona", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+    private List<Direccion> direcciones;
 
     @PrePersist
     protected void prePersist() {
@@ -95,5 +102,13 @@ public class Persona {
 
     public void setActivo(Boolean activo) {
         this.activo = activo;
+    }
+
+    public List<Direccion> getDirecciones() {
+        return direcciones;
+    }
+
+    public void setDirecciones(List<Direccion> direcciones) {
+        this.direcciones = direcciones;
     }
 }
