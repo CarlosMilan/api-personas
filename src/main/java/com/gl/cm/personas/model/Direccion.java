@@ -1,11 +1,15 @@
 package com.gl.cm.personas.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.UUID;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "direcciones")
 public class Direccion {
@@ -23,35 +27,4 @@ public class Direccion {
     @JoinColumn(name = "id_persona")
     private Persona persona;
 
-    public String getCalle() {
-        return calle;
-    }
-
-    public void setCalle(String calle) {
-        this.calle = calle;
-    }
-
-    public Integer getNumeracion() {
-        return numeracion;
-    }
-
-    public void setNumeracion(Integer numeracion) {
-        this.numeracion = numeracion;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public Persona getPersona() {
-        return persona;
-    }
-
-    public void setPersona(Persona persona) {
-        this.persona = persona;
-    }
 }

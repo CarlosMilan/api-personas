@@ -5,7 +5,6 @@ import com.gl.cm.personas.dto.PersonaDTO;
 import com.gl.cm.personas.exception.PersonaNotFoundException;
 import com.gl.cm.personas.model.Persona;
 import com.gl.cm.personas.repository.PersonaRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -13,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -88,7 +85,9 @@ class PersonaServiceTest {
                 () -> assertNotNull(persona),
                 () -> assertEquals(personaDTO.getApellido(), persona.getApellido()),
                 () -> assertEquals(personaDTO.getDni(), persona.getDni()),
-                () -> assertEquals(personaDTO.getEmail(), persona.getEmail())
+                () -> assertEquals(personaDTO.getEmail(), persona.getEmail()),
+                () -> assertNotNull(persona.getDirecciones()),
+                () -> assertEquals(1, persona.getDirecciones().size())
         );
 
         verify(personaRepository).saveAndFlush(any(Persona.class));
@@ -98,7 +97,7 @@ class PersonaServiceTest {
     @Test
     @DisplayName("Editar Persona")
     void updatePersona() {
-        when(personaRepository.existsById(any())).thenReturn(true);
+        when(personaRepository.findById(any())).thenReturn(DatosPersonas.createPersona1());
         when(personaRepository.saveAndFlush(any(Persona.class))).then(invocation -> {
             Persona p = invocation.getArgument(0);
             p.setEmail("test01@email.com");
@@ -116,7 +115,7 @@ class PersonaServiceTest {
                 () -> assertEquals(personaDTO.getEmail(), persona.getEmail())
         );
         verify(personaRepository).saveAndFlush(any());
-        verify(personaRepository).existsById(any());
+        verify(personaRepository).findById(any());
     }
 
     @Test
@@ -137,7 +136,7 @@ class PersonaServiceTest {
         assertEquals("Persona not found", ex.getMessage());
 
         verify(personaRepository, never()).saveAndFlush(any());
-        verify(personaRepository).existsById(any());
+        verify(personaRepository).findById(any());
     }
 
     @Test

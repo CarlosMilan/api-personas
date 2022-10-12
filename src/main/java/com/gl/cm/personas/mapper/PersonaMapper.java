@@ -21,6 +21,11 @@ public class PersonaMapper {
         return mapper.map(personaDTO, Persona.class);
     }
 
+    public Persona personaDTOtoPersona(PersonaDTO personaDTO, Persona persona) {
+        mapper.map(personaDTO, persona);
+        return persona;
+    }
+
     public PersonaDTO toPersonaDTO(Persona persona) {
         return mapper.map(persona, PersonaDTO.class);
     }

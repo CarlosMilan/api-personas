@@ -46,10 +46,9 @@ public class PersonaServiceImpl implements PersonaService{
 
     @Transactional
     public PersonaDTO updatePersona(PersonaDTO personaDTO) {
-        if (!personaRepository.existsById(personaDTO.getId()))
-            throw new PersonaNotFoundException("Persona not found");
-        Persona persona = personaMapper.toPersona(personaDTO);
-        persona.setId(personaDTO.getId());
+        Persona persona = personaRepository.findById(personaDTO.getId())
+                .orElseThrow(() -> new PersonaNotFoundException("Persona not found"));
+        personaMapper.personaDTOtoPersona(personaDTO, persona);
         return personaMapper.toPersonaDTO(personaRepository.saveAndFlush(persona));
     }
 

@@ -1,15 +1,14 @@
 package com.gl.cm.personas;
 
+import com.gl.cm.personas.dto.DireccionDTO;
 import com.gl.cm.personas.dto.PersonaDTO;
+import com.gl.cm.personas.model.Direccion;
 import com.gl.cm.personas.model.Persona;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class DatosPersonas {
 
@@ -29,6 +28,16 @@ public class DatosPersonas {
         formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
         persona.setCreacion(LocalDateTime.parse("26-09-2022 10:13:56", formatter));
 
+        List<Direccion> direccions = new ArrayList<>();
+        Direccion direccion = new Direccion();
+        direccion.setCalle("Evergreen W");
+        direccion.setNumeracion(1234);
+        direccion.setPersona(persona);
+        direccion.setId(UUID.randomUUID());
+        direccions.add(direccion);
+
+        persona.setDirecciones(direccions);
+
         return Optional.of(persona);
     }
 
@@ -42,6 +51,13 @@ public class DatosPersonas {
         personaDTO.setFechaNacimiento("20-03-2003");
 
         personaDTO.setDni("20300400");
+
+        List<DireccionDTO> direcciones = new ArrayList<>();
+        DireccionDTO direccionDTO = new DireccionDTO();
+        direccionDTO.setCalle("Evergreen W");
+        direccionDTO.setNumeracion(134);
+        direcciones.add(direccionDTO);
+        personaDTO.setDirecciones(direcciones);
 
         return personaDTO;
     }
