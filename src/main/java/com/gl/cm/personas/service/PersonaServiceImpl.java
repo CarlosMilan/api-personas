@@ -2,10 +2,13 @@ package com.gl.cm.personas.service;
 
 import com.gl.cm.personas.dto.PersonaDTO;
 import com.gl.cm.personas.exception.PersonaNotFoundException;
+import com.gl.cm.personas.exception.ProvinciaNotFoundException;
 import com.gl.cm.personas.mapper.PersonaMapper;
 import com.gl.cm.personas.model.Persona;
+import com.gl.cm.personas.model.Provincia;
 import com.gl.cm.personas.repository.PersonaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.gl.cm.personas.repository.ProvinciaRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,16 +18,12 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class PersonaServiceImpl implements PersonaService{
 
     private final PersonaRepository personaRepository;
+    private final ProvinciaRepository provinciaRepository;
     private final PersonaMapper personaMapper;
-
-    @Autowired
-    public PersonaServiceImpl(PersonaRepository personaRepository, PersonaMapper personaMapper) {
-        this.personaRepository = personaRepository;
-        this.personaMapper = personaMapper;
-    }
 
     @Transactional(readOnly = true)
     public List<PersonaDTO> getAll() {
@@ -40,7 +39,12 @@ public class PersonaServiceImpl implements PersonaService{
     @Transactional
     public PersonaDTO savePersona(PersonaDTO personaDTO) {
         Persona persona = personaMapper.toPersona(personaDTO);
-        persona.getDirecciones().forEach(d -> d.setPersona(persona));
+        persona.getDirecciones().forEach(d -> {
+            d.setPersona(persona);
+            Provincia provincia = provinciaRepository.findByNombreIgnoreCase(d.getProvincia().getNombre())
+                    .orElseThrow(() -> new ProvinciaNotFoundException("Provincia no encontrada"));
+            d.setProvincia(provincia);
+        });
         return personaMapper.toPersonaDTO(personaRepository.saveAndFlush(persona));
     }
 

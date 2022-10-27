@@ -4,11 +4,12 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @ToString
-public class DireccionDTO {
-    private String calle;
-    private Integer numeracion;
-    private ProvinciaDTO provincia;
+public class ProvinciaDTO {
+    private UUID id;
+    private String nombre;
 }

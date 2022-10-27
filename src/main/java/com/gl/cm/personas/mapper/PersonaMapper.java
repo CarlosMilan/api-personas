@@ -2,20 +2,16 @@ package com.gl.cm.personas.mapper;
 
 import com.gl.cm.personas.dto.PersonaDTO;
 import com.gl.cm.personas.model.Persona;
+import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 
+@AllArgsConstructor
 @Component
 public class PersonaMapper {
 
     private final ModelMapper mapper;
-
-    @Autowired
-    public PersonaMapper(ModelMapper modelMapper) {
-        this.mapper = modelMapper;
-    }
 
     public Persona toPersona(PersonaDTO personaDTO) {
         return mapper.map(personaDTO, Persona.class);

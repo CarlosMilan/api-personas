@@ -3,7 +3,8 @@ package com.gl.cm.personas.controller;
 
 import com.gl.cm.personas.dto.PersonaDTO;
 import com.gl.cm.personas.service.PersonaService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,16 +14,13 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
+@AllArgsConstructor
 @RestController
 @RequestMapping(value = "/personas")
 public class PersonaController {
 
     private final PersonaService personaService;
-
-    @Autowired
-    public PersonaController(PersonaService personaService) {
-        this.personaService = personaService;
-    }
 
     @GetMapping()
     public ResponseEntity<List<PersonaDTO>> findAll() {
@@ -32,6 +30,7 @@ public class PersonaController {
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PersonaDTO> findById(@PathVariable(name = "id") String id) {
+        log.info("id: " + id);
         PersonaDTO persona = personaService.findById(UUID.fromString(id));
         return new ResponseEntity<>(persona, HttpStatus.OK);
     }
