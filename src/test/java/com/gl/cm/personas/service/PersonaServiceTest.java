@@ -2,7 +2,7 @@ package com.gl.cm.personas.service;
 
 import com.gl.cm.personas.DatosPersonas;
 import com.gl.cm.personas.dto.PersonaDTO;
-import com.gl.cm.personas.exception.PersonaNotFoundException;
+import com.gl.cm.personas.exception.ResourceNotFoundException;
 import com.gl.cm.personas.model.Persona;
 import com.gl.cm.personas.repository.PersonaRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -66,7 +66,7 @@ class PersonaServiceTest {
     void getPersonaException() {
         UUID uuid = UUID.randomUUID();
         when(personaRepository.findById(any())).thenReturn(Optional.empty());
-        PersonaNotFoundException ex = assertThrows(PersonaNotFoundException.class, () -> personaService.findById(uuid));
+        ResourceNotFoundException ex = assertThrows(ResourceNotFoundException.class, () -> personaService.findById(uuid));
 
         assertEquals("Persona not found", ex.getMessage());
         verify(personaRepository).findById(any());
@@ -130,7 +130,7 @@ class PersonaServiceTest {
 
         PersonaDTO personaDTO = DatosPersonas.createPersonaDTO1();
         personaDTO.setEmail("test01@email.com");
-        PersonaNotFoundException ex = assertThrows(PersonaNotFoundException.class, () ->
+        ResourceNotFoundException ex = assertThrows(ResourceNotFoundException.class, () ->
                 personaService.updatePersona(personaDTO));
 
         assertEquals("Persona not found", ex.getMessage());
@@ -153,7 +153,7 @@ class PersonaServiceTest {
     void deletePersonaNoExiste() {
         when(personaRepository.existsById(any())).thenReturn(false);
 
-        PersonaNotFoundException ex = assertThrows(PersonaNotFoundException.class, () ->
+        ResourceNotFoundException ex = assertThrows(ResourceNotFoundException.class, () ->
                 personaService.delete(UUID.fromString("c2654c34-3dad-11ed-b878-0242ac120002")));
 
         assertEquals("Persona Not Found", ex.getMessage());

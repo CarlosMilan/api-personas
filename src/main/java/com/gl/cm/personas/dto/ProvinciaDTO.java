@@ -1,14 +1,10 @@
 package com.gl.cm.personas.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
 import java.util.UUID;
 
-@Getter
-@Setter
-@ToString
+@Data
 public class ProvinciaDTO {
     private UUID id;
     private String nombre;

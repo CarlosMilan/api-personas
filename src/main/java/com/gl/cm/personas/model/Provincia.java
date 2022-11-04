@@ -1,17 +1,13 @@
 package com.gl.cm.personas.model;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.List;
 import java.util.UUID;
 
-@Getter
-@Setter
-@ToString
+@Data
 @Entity
 @Table(name = "provincias")
 public class Provincia {

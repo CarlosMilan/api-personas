@@ -1,8 +1,6 @@
 package com.gl.cm.personas.model;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -12,9 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-@Getter
-@Setter
-@ToString
+@Data
 @Entity
 @Table(name = "personas")
 public class Persona {

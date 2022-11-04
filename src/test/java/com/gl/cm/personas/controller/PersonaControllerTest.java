@@ -3,7 +3,7 @@ package com.gl.cm.personas.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gl.cm.personas.DatosPersonas;
 import com.gl.cm.personas.dto.PersonaDTO;
-import com.gl.cm.personas.exception.PersonaNotFoundException;
+import com.gl.cm.personas.exception.ResourceNotFoundException;
 import com.gl.cm.personas.repository.PersonaRepository;
 import com.gl.cm.personas.service.PersonaServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -74,7 +74,7 @@ class PersonaControllerTest {
     @Test
     @DisplayName("Obtener persona No existente")
     void getPersonaNotFound() throws Exception{
-        when(personaService.findById(any())).thenThrow(new PersonaNotFoundException("Persona Not Found"));
+        when(personaService.findById(any())).thenThrow(new ResourceNotFoundException("Persona Not Found"));
 
         mvc.perform(get("/personas/c2654c34-3dad-11ed-b878-0242ac120002").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
@@ -122,7 +122,7 @@ class PersonaControllerTest {
     @DisplayName("Actualizar Persona no existente")
     void updatePersonaNotFound() throws Exception{
         PersonaDTO personaDTO = DatosPersonas.createPersonaDTO1();
-        when(personaService.updatePersona(any())).thenThrow(new PersonaNotFoundException("Persona not found"));
+        when(personaService.updatePersona(any())).thenThrow(new ResourceNotFoundException("Persona not found"));
 
         mvc.perform(put("/personas").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(personaDTO)))
                 .andExpect(status().isBadRequest())
@@ -143,7 +143,7 @@ class PersonaControllerTest {
     @Test
     @DisplayName("Borrar Persona no existente")
     void deletePersonaNotFound() throws Exception {
-        doThrow(new PersonaNotFoundException("Persona not found"))
+        doThrow(new ResourceNotFoundException("Persona not found"))
                 .when(personaService).delete(any());
 
         mvc.perform(delete("/personas/c2654c34-3dad-11ed-b878-0242ac120002"))

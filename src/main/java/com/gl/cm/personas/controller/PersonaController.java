@@ -37,18 +37,21 @@ public class PersonaController {
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PersonaDTO> save(@Valid @RequestBody PersonaDTO personaDTO) {
+        log.info("Save: " + personaDTO);
         PersonaDTO persona = personaService.savePersona(personaDTO);
         return new ResponseEntity<>(persona, HttpStatus.CREATED);
     }
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PersonaDTO> update(@Valid @RequestBody PersonaDTO personaDTO) {
+        log.info("Update: " + personaDTO);
         PersonaDTO persona = personaService.updatePersona(personaDTO);
         return new ResponseEntity<>(persona, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable(name = "id") String id) {
+        log.info("Delete:  " + id);
         personaService.delete(UUID.fromString(id));
         return new ResponseEntity<>(HttpStatus.OK);
     }

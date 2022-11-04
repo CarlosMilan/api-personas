@@ -1,17 +1,13 @@
 package com.gl.cm.personas.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.UUID;
 
-@Getter
-@Setter
-@ToString
+@Data
 public class PersonaDTO {
 
     private UUID id;

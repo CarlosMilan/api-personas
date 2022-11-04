@@ -3,7 +3,6 @@ package com.gl.cm.personas.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -11,7 +10,6 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@ToString
 @Entity
 @Table(name = "direcciones")
 public class Direccion {
@@ -34,4 +32,12 @@ public class Direccion {
     @JoinColumn(name = "id_provincia")
     private Provincia provincia;
 
+    @Override
+    public String toString() {
+        return "Direccion{" +
+                "id=" + id +
+                ", calle='" + calle + '\'' +
+                ", numeracion=" + numeracion +
+                '}';
+    }
 }

@@ -1,12 +1,9 @@
 package com.gl.cm.personas.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-
+import lombok.Data;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
+@Data
 public class ErrorDTO {
     private Integer codigo;
     private String mensaje;
