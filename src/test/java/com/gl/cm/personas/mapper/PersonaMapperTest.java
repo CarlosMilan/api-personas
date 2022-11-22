@@ -1,6 +1,6 @@
 package com.gl.cm.personas.mapper;
 
-import com.gl.cm.personas.DatosPersonas;
+import com.gl.cm.personas.Datos;
 import com.gl.cm.personas.dto.DireccionDTO;
 import com.gl.cm.personas.dto.ErrorDTO;
 import com.gl.cm.personas.dto.PersonaDTO;
@@ -8,11 +8,9 @@ import com.gl.cm.personas.model.Persona;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -45,20 +43,11 @@ class PersonaMapperTest {
         personaDTO.setFechaNacimiento("20-03-2003");
         personaDTO.setDni("20300400");
 
-        List<DireccionDTO> direcciones = new ArrayList<>();
-        DireccionDTO direccionDTO = new DireccionDTO();
-        direccionDTO.setCalle("Evergreen W");
-        direccionDTO.setNumeracion(123);
-        direcciones.add(direccionDTO);
-        personaDTO.setDirecciones(direcciones);
-
         assertEquals("test@correo.com", personaDTO.getEmail());
         assertEquals("Jhon", personaDTO.getNombre());
         assertEquals("Conor", personaDTO.getApellido());
         assertEquals("20300400", personaDTO.getDni());
         assertEquals("20-03-2003", personaDTO.getFechaNacimiento());
-        assertEquals("Evergreen W", personaDTO.getDirecciones().get(0).getCalle());
-        assertEquals(123, personaDTO.getDirecciones().get(0).getNumeracion());
 
     }
 
@@ -85,7 +74,7 @@ class PersonaMapperTest {
     @DisplayName("PersonaDTO a Persona")
     @Test
     void personaDTOAPersonaTest(){
-        PersonaDTO personaDTO = DatosPersonas.createPersonaDTO1();
+        PersonaDTO personaDTO = Datos.createPersonaDTO1();
 
         Persona persona = personaMapper.toPersona(personaDTO);
 
@@ -103,7 +92,7 @@ class PersonaMapperTest {
     @DisplayName("Persona a PersonaDTO")
     @Test
     void personaTOPersonaDTO(){
-        Persona persona = DatosPersonas.createPersona1().get();
+        Persona persona = Datos.createPersona1().get();
         System.out.println("persona.getFechaNacimiento() = " + persona.getFechaNacimiento());
 
         PersonaDTO personaDTO = personaMapper.toPersonaDTO(persona);

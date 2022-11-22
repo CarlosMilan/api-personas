@@ -1,6 +1,5 @@
 package com.gl.cm.personas.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
@@ -22,22 +21,12 @@ public class Direccion {
     private String calle;
     private Integer numeracion;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_persona")
+    @ManyToOne
+    @JoinColumn(name = "persona_id")
     private Persona persona;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_provincia")
+    @ManyToOne
+    @JoinColumn(name = "provincia_id")
     private Provincia provincia;
 
-    @Override
-    public String toString() {
-        return "Direccion{" +
-                "id=" + id +
-                ", calle='" + calle + '\'' +
-                ", numeracion=" + numeracion +
-                '}';
-    }
 }

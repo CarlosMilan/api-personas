@@ -4,7 +4,6 @@ import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -21,6 +20,4 @@ public class Provincia {
     @Column(nullable = false)
     private String nombre;
 
-    @OneToMany(mappedBy = "provincia", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
-    private List<Direccion> direcciones;
 }

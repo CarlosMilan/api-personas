@@ -7,7 +7,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -30,9 +29,6 @@ public class Persona {
     private LocalDate fechaNacimiento;
     private LocalDateTime creacion;
     private Boolean activo;
-
-    @OneToMany(mappedBy = "persona", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
-    private List<Direccion> direcciones;
 
     @PrePersist
     protected void prePersist() {

@@ -1,6 +1,6 @@
 package com.gl.cm.personas.service;
 
-import com.gl.cm.personas.DatosPersonas;
+import com.gl.cm.personas.Datos;
 import com.gl.cm.personas.dto.PersonaDTO;
 import com.gl.cm.personas.exception.ResourceNotFoundException;
 import com.gl.cm.personas.model.Persona;
@@ -19,7 +19,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@DisplayName("Persona Service")
+@DisplayName("Tests Persona Service")
 @SpringBootTest
 class PersonaServiceTest {
 
@@ -32,7 +32,7 @@ class PersonaServiceTest {
     @Test
     @DisplayName("Obtener Lista de personas")
     void getPersonas() {
-        when(personaRepository.findAll()).thenReturn(DatosPersonas.createPersonasList());
+        when(personaRepository.findAll()).thenReturn(Datos.createPersonasList());
 
         List<PersonaDTO> personas = personaService.getAll();
 
@@ -49,7 +49,7 @@ class PersonaServiceTest {
     @DisplayName("Obtener persona por Id")
     void getPersonaById() {
         when(personaRepository.findById(UUID.fromString("c2654c34-3dad-11ed-b878-0242ac120002")))
-                .thenReturn(DatosPersonas.createPersona1());
+                .thenReturn(Datos.createPersona1());
 
         PersonaDTO persona = personaService.findById(UUID.fromString("c2654c34-3dad-11ed-b878-0242ac120002"));
 
@@ -75,9 +75,9 @@ class PersonaServiceTest {
     @Test
     @DisplayName("Guardar Persona")
     void savePersona() {
-        PersonaDTO personaDTO = DatosPersonas.createPersonaDTO1();
+        PersonaDTO personaDTO = Datos.createPersonaDTO1();
 
-        when(personaRepository.saveAndFlush(any())).thenReturn(DatosPersonas.createPersona1().get());
+        when(personaRepository.save(any())).thenReturn(Datos.createPersona1().get());
 
         PersonaDTO persona = personaService.savePersona(personaDTO);
 
@@ -85,26 +85,24 @@ class PersonaServiceTest {
                 () -> assertNotNull(persona),
                 () -> assertEquals(personaDTO.getApellido(), persona.getApellido()),
                 () -> assertEquals(personaDTO.getDni(), persona.getDni()),
-                () -> assertEquals(personaDTO.getEmail(), persona.getEmail()),
-                () -> assertNotNull(persona.getDirecciones()),
-                () -> assertEquals(1, persona.getDirecciones().size())
+                () -> assertEquals(personaDTO.getEmail(), persona.getEmail())
         );
 
-        verify(personaRepository).saveAndFlush(any(Persona.class));
+        verify(personaRepository).save(any(Persona.class));
 
     }
 
     @Test
     @DisplayName("Editar Persona")
     void updatePersona() {
-        when(personaRepository.findById(any())).thenReturn(DatosPersonas.createPersona1());
+        when(personaRepository.findById(any())).thenReturn(Datos.createPersona1());
         when(personaRepository.saveAndFlush(any(Persona.class))).then(invocation -> {
             Persona p = invocation.getArgument(0);
             p.setEmail("test01@email.com");
             return p;
         });
 
-        PersonaDTO personaDTO = DatosPersonas.createPersonaDTO1();
+        PersonaDTO personaDTO = Datos.createPersonaDTO1();
         personaDTO.setEmail("test01@email.com");
         PersonaDTO persona = personaService.updatePersona(personaDTO);
 
@@ -128,7 +126,7 @@ class PersonaServiceTest {
             return p;
         });
 
-        PersonaDTO personaDTO = DatosPersonas.createPersonaDTO1();
+        PersonaDTO personaDTO = Datos.createPersonaDTO1();
         personaDTO.setEmail("test01@email.com");
         ResourceNotFoundException ex = assertThrows(ResourceNotFoundException.class, () ->
                 personaService.updatePersona(personaDTO));

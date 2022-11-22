@@ -2,15 +2,17 @@ package com.gl.cm.personas;
 
 import com.gl.cm.personas.dto.DireccionDTO;
 import com.gl.cm.personas.dto.PersonaDTO;
+import com.gl.cm.personas.dto.ProvinciaDTO;
 import com.gl.cm.personas.model.Direccion;
 import com.gl.cm.personas.model.Persona;
+import com.gl.cm.personas.model.Provincia;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-public class DatosPersonas {
+public class Datos {
 
     public static Optional<Persona> createPersona1() {
         Persona persona = new Persona();
@@ -28,16 +30,6 @@ public class DatosPersonas {
         formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
         persona.setCreacion(LocalDateTime.parse("26-09-2022 10:13:56", formatter));
 
-        List<Direccion> direccions = new ArrayList<>();
-        Direccion direccion = new Direccion();
-        direccion.setCalle("Evergreen W");
-        direccion.setNumeracion(1234);
-        direccion.setPersona(persona);
-        direccion.setId(UUID.randomUUID());
-        direccions.add(direccion);
-
-        persona.setDirecciones(direccions);
-
         return Optional.of(persona);
     }
 
@@ -51,13 +43,6 @@ public class DatosPersonas {
         personaDTO.setFechaNacimiento("20-03-2003");
 
         personaDTO.setDni("20300400");
-
-        List<DireccionDTO> direcciones = new ArrayList<>();
-        DireccionDTO direccionDTO = new DireccionDTO();
-        direccionDTO.setCalle("Evergreen W");
-        direccionDTO.setNumeracion(134);
-        direcciones.add(direccionDTO);
-        personaDTO.setDirecciones(direcciones);
 
         return personaDTO;
     }
@@ -136,5 +121,119 @@ public class DatosPersonas {
         persona3.setDni("20300400");
 
         return Arrays.asList(persona1, persona2, persona3);
+    }
+
+    public static Optional<Direccion> createDireccion() {
+        Direccion direccion = new Direccion();
+        direccion.setCalle("Evergreen East");
+        direccion.setNumeracion(449);
+
+        Provincia provincia = new Provincia();
+        provincia.setNombre("Buenos Aires");
+        provincia.setId(UUID.randomUUID());
+
+        direccion.setProvincia(provincia);
+        direccion.setPersona(createPersona1().get());
+
+        return Optional.of(direccion);
+    }
+
+    public static DireccionDTO createDireccionDTO() {
+        DireccionDTO direccion = new DireccionDTO();
+        direccion.setCalle("Evergreen East");
+        direccion.setNumeracion(449);
+
+        ProvinciaDTO provincia = new ProvinciaDTO();
+        provincia.setNombre("Buenos Aires");
+        provincia.setId(UUID.randomUUID());
+
+        direccion.setProvincia(provincia);
+        direccion.setPersona(createPersonaDTO1());
+
+        return direccion;
+    }
+
+    public static List<Direccion> createDireccionList() {
+        Direccion direccion1 = new Direccion();
+        direccion1.setCalle("Evergreen East");
+        direccion1.setNumeracion(449);
+
+        Provincia provincia = new Provincia();
+        provincia.setNombre("Buenos Aires");
+        provincia.setId(UUID.randomUUID());
+
+        direccion1.setProvincia(provincia);
+        direccion1.setPersona(createPersona1().get());
+
+        Direccion direccion2 = new Direccion();
+        direccion2.setCalle("9 de Julio Norte");
+        direccion2.setNumeracion(2034);
+
+        Provincia provincia1 = new Provincia();
+        provincia1.setNombre("Mendoza");
+        provincia1.setId(UUID.randomUUID());
+
+        direccion2.setProvincia(provincia1);
+        direccion2.setPersona(createPersona1().get());
+
+        return Arrays.asList(direccion1, direccion2);
+    }
+
+    public static List<DireccionDTO> createDireccionDTOList() {
+        DireccionDTO direccion1 = new DireccionDTO();
+        direccion1.setCalle("Evergreen East");
+        direccion1.setNumeracion(449);
+
+        ProvinciaDTO provincia = new ProvinciaDTO();
+        provincia.setNombre("Buenos Aires");
+        provincia.setId(UUID.randomUUID());
+
+        direccion1.setProvincia(provincia);
+        direccion1.setPersona(createPersonaDTO1());
+
+        DireccionDTO direccion2 = new DireccionDTO();
+        direccion2.setCalle("9 de Julio Norte");
+        direccion2.setNumeracion(2034);
+
+        ProvinciaDTO provincia1 = new ProvinciaDTO();
+        provincia1.setNombre("Mendoza");
+        provincia1.setId(UUID.randomUUID());
+
+        direccion2.setProvincia(provincia1);
+        direccion2.setPersona(createPersonaDTO1());
+
+        return Arrays.asList(direccion1, direccion2);
+    }
+
+    public static List<Provincia> createProvinciaList() {
+        Provincia provincia1 = new Provincia();
+        provincia1.setId(UUID.randomUUID());
+        provincia1.setNombre("Buenos Aires");
+
+        Provincia provincia2 = new Provincia();
+        provincia2.setId(UUID.randomUUID());
+        provincia2.setNombre("Mendoza");
+
+        Provincia provincia3 = new Provincia();
+        provincia3.setId(UUID.randomUUID());
+        provincia3.setNombre("Jujuy");
+
+        return Arrays.asList(provincia1, provincia2, provincia3);
+    }
+
+    public static List<ProvinciaDTO> createProvinciaDTOList() {
+        ProvinciaDTO provincia1 = new ProvinciaDTO();
+        provincia1.setId(UUID.randomUUID());
+        provincia1.setNombre("Buenos Aires");
+
+        ProvinciaDTO provincia2 = new ProvinciaDTO();
+        provincia2.setId(UUID.randomUUID());
+        provincia2.setNombre("Mendoza");
+
+        ProvinciaDTO provincia3 = new ProvinciaDTO();
+        provincia3.setId(UUID.randomUUID());
+        provincia3.setNombre("Jujuy");
+
+        return Arrays.asList(provincia1, provincia2, provincia3);
     }
 }

@@ -4,7 +4,6 @@ import lombok.Data;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -22,7 +21,4 @@ public class PersonaDTO {
     private String email;
 
     private String fechaNacimiento;
-
-    private List<DireccionDTO> direcciones;
-
 }

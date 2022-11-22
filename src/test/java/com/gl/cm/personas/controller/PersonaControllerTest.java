@@ -1,7 +1,7 @@
 package com.gl.cm.personas.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gl.cm.personas.DatosPersonas;
+import com.gl.cm.personas.Datos;
 import com.gl.cm.personas.dto.PersonaDTO;
 import com.gl.cm.personas.exception.ResourceNotFoundException;
 import com.gl.cm.personas.repository.PersonaRepository;
@@ -46,7 +46,7 @@ class PersonaControllerTest {
     @Test
     @DisplayName("Lista de Personas")
     void getPersonas() throws Exception {
-        when(personaService.getAll()).thenReturn(DatosPersonas.createPersonasDTOList());
+        when(personaService.getAll()).thenReturn(Datos.createPersonasDTOList());
 
         mvc.perform(get("/personas").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -61,7 +61,7 @@ class PersonaControllerTest {
     @Test
     @DisplayName("Obtener Personas")
     void getPersona() throws Exception {
-        when(personaService.findById(any())).thenReturn(DatosPersonas.createPersonaDTO1());
+        when(personaService.findById(any())).thenReturn(Datos.createPersonaDTO1());
 
         mvc.perform(get("/personas/c2654c34-3dad-11ed-b878-0242ac120002").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -97,8 +97,8 @@ class PersonaControllerTest {
     @Test
     @DisplayName("Guardar Persona")
     void savePersona() throws Exception {
-        PersonaDTO personaDTO = DatosPersonas.createPersonaDTO1();
-        when(personaService.savePersona(any())).thenReturn(DatosPersonas.createPersonaDTO1());
+        PersonaDTO personaDTO = Datos.createPersonaDTO1();
+        when(personaService.savePersona(any())).thenReturn(Datos.createPersonaDTO1());
 
         mvc.perform(post("/personas").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(personaDTO)))
                 .andExpect(status().isCreated())
@@ -109,8 +109,8 @@ class PersonaControllerTest {
     @Test
     @DisplayName("Editar Persona")
     void updatePersona() throws Exception {
-        PersonaDTO personaDTO = DatosPersonas.createPersonaDTO1();
-        when(personaService.updatePersona(any())).thenReturn(DatosPersonas.createPersonaDTO1());
+        PersonaDTO personaDTO = Datos.createPersonaDTO1();
+        when(personaService.updatePersona(any())).thenReturn(Datos.createPersonaDTO1());
 
         mvc.perform(put("/personas").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(personaDTO)))
                 .andExpect(status().isOk())
@@ -121,7 +121,7 @@ class PersonaControllerTest {
     @Test
     @DisplayName("Actualizar Persona no existente")
     void updatePersonaNotFound() throws Exception{
-        PersonaDTO personaDTO = DatosPersonas.createPersonaDTO1();
+        PersonaDTO personaDTO = Datos.createPersonaDTO1();
         when(personaService.updatePersona(any())).thenThrow(new ResourceNotFoundException("Persona not found"));
 
         mvc.perform(put("/personas").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(personaDTO)))
@@ -137,7 +137,7 @@ class PersonaControllerTest {
         when(personaRepository.existsById(UUID.fromString("c2654c34-3dad-11ed-b878-0242ac120002"))).thenReturn(true);
 
         mvc.perform(delete("/personas/c2654c34-3dad-11ed-b878-0242ac120002"))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
     }
 
     @Test

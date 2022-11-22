@@ -53,6 +53,6 @@ public class PersonaController {
     public ResponseEntity<Void> delete(@PathVariable(name = "id") String id) {
         log.info("Delete:  " + id);
         personaService.delete(UUID.fromString(id));
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

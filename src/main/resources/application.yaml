@@ -1,0 +1,31 @@
+spring:
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    hibernate:
+      generate-ddl: true
+      ddl-auto: create-drop
+  #  properties:
+  #    hibernate:
+  #      default_schema: control
+  datasource:
+    url: jdbc:postgresql://localhost:5432/personasdb
+    driverClassName: org.postgresql.Driver
+    testWhileIdle: true
+    testOnBorrow: true
+    password: "1234"
+    username: "postgres"
+    hikari:
+      # keepaliveTime: 0 #Disabled by default
+      connection-timeout: 30000
+      maximum-pool-size: 5 #Default 10
+      max-lifetime: 1800000 #Default 30 minutes
+      initial-size: 2
+      minimum-idle: 1
+      idle-timeout: 600000
+      max-idle: 1
+      pool-name: "ms"
+      validationQuery: SELECT 1
+  sql:
+    init:
+      platform: postgres

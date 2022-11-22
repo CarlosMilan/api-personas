@@ -3,7 +3,6 @@ package com.gl.cm.personas.service;
 import com.gl.cm.personas.dto.PersonaDTO;
 import com.gl.cm.personas.exception.ResourceNotFoundException;
 import com.gl.cm.personas.mapper.PersonaMapper;
-import com.gl.cm.personas.model.Direccion;
 import com.gl.cm.personas.model.Persona;
 import com.gl.cm.personas.model.Provincia;
 import com.gl.cm.personas.repository.PersonaRepository;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -47,13 +45,6 @@ public class PersonaServiceImpl implements PersonaService{
     public PersonaDTO savePersona(PersonaDTO personaDTO) {
         log.info("Creando persona: {}", personaDTO);
         Persona persona = personaMapper.toPersona(personaDTO);
-        log.trace("persona: " + persona);
-        persona.getDirecciones().forEach(d -> {
-            d.setPersona(persona);
-            Provincia provincia = provinciaRepository.findByNombreIgnoreCase(d.getProvincia().getNombre())
-                    .orElseThrow(() -> new ResourceNotFoundException("Provincia no encontrada"));
-            d.setProvincia(provincia);
-        });
         log.trace("persona: {}", persona);
         Persona savedPersona = personaRepository.save(persona);
         log.info("Persona guardada: {}", savedPersona);
@@ -82,5 +73,4 @@ public class PersonaServiceImpl implements PersonaService{
             throw new ResourceNotFoundException("Persona Not Found");
         }
     }
-
 }
