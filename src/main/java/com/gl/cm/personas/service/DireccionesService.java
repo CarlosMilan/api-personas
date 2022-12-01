@@ -10,5 +10,5 @@ public interface DireccionesService {
     List<DireccionDTO> getDirecciones(PersonaDTO personaDTO);
     List<DireccionDTO> getDirecciones(String idPersona);
     DireccionDTO update(DireccionDTO direccionDTO);
-    void delete(String idDireccion);
+    void delete(DireccionDTO direccionDTO);
 }

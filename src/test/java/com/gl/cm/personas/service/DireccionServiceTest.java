@@ -227,26 +227,10 @@ class DireccionServiceTest {
     @Test
     @DisplayName("Borrar direccion")
     void deleteDireccionTest() {
-        when(direccionesRepository.existsById(any())).thenReturn(true);
+        DireccionDTO direccionDTO = Datos.createDireccionDTO();
+        direccionesService.delete(direccionDTO);
 
-        direccionesService.delete("c2654c34-3dad-11ed-b878-0242ac120002");
-
-        verify(direccionesRepository).existsById(any());
-        verify(direccionesRepository).deleteById(any());
-    }
-
-    @Test
-    @DisplayName("Borrar direccion - direccion no encontrada")
-    void deleteDireccionTest2() {
-        when(direccionesRepository.existsById(any())).thenReturn(false);
-
-        ResourceNotFoundException ex = assertThrows(ResourceNotFoundException.class, () -> direccionesService.delete("c2654c34-3dad-11ed-b878-0242ac120002"));
-
-        assertNotNull(ex);
-        assertEquals("Direccion not found", ex.getMessage());
-
-        verify(direccionesRepository).existsById(any());
-        verify(direccionesRepository, never()).deleteById(any());
+        verify(direccionesRepository).delete(any(Direccion.class));
     }
 
 

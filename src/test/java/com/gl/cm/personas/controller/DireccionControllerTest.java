@@ -133,21 +133,23 @@ class DireccionControllerTest {
     @Test
     @DisplayName("Borrar direccion")
     void borrarDireccionTest() throws Exception {
+        DireccionDTO direccionDTO = Datos.createDireccionDTO();
         String idDireccion = "c2654c34-3dad-11ed-b878-0242ac120002";
         when(direccionesRepository.existsById(UUID.fromString(idDireccion))).thenReturn(true);
 
-        mvc.perform(delete("/direcciones/"+idDireccion))
+        mvc.perform(delete("/direcciones").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(direccionDTO)))
                 .andExpect(status().isNoContent());
     }
 
     @Test
     @DisplayName("Borrar direccion no existe")
     void borrarDireccionTest2() throws Exception {
-        String idDireccion = "c2654c34-3dad-11ed-b878-0242ac120002";
+        DireccionDTO direccionDTO = Datos.createDireccionDTO();
+        direccionDTO.setId(UUID.fromString("c2654c34-3dad-11ed-b878-0242ac120002"));
         doThrow(new ResourceNotFoundException("Direccion not found"))
-                .when(direccionesServices).delete(idDireccion);
+                .when(direccionesServices).delete(direccionDTO);
 
-        mvc.perform(delete("/direcciones/"+idDireccion))
+        mvc.perform(delete("/direcciones").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(direccionDTO)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.codigo").value(400))

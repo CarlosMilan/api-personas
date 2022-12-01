@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DireccionesServiceImpl implements DireccionesService {
 
-    private final DireccionesRepository repository;
+    private final DireccionesRepository direccionRepository;
 
     private final ProvinciaRepository provinciaRepository;
     private final PersonaRepository personaRepository;
@@ -43,40 +43,36 @@ public class DireccionesServiceImpl implements DireccionesService {
         direccion.setPersona(persona);
         direccion.setProvincia(provincia);
 
-        return modelMapper.map(repository.save(direccion), DireccionDTO.class);
+        return modelMapper.map(direccionRepository.save(direccion), DireccionDTO.class);
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<DireccionDTO> getDirecciones(PersonaDTO personaDTO) {
-        Persona persona = modelMapper.map(personaDTO, Persona.class);
-        return repository.findAllByPersonaId(persona.getId())
+        return direccionRepository.findAllByPersonaId(personaDTO.getId())
                 .stream().map(d -> modelMapper.map(d, DireccionDTO.class))
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public List<DireccionDTO> getDirecciones(String idPersona) {
-        return repository.findAllByPersonaId(UUID.fromString(idPersona))
+        return direccionRepository.findAllByPersonaId(UUID.fromString(idPersona))
                 .stream().map(d -> modelMapper.map(d, DireccionDTO.class))
                 .collect(Collectors.toList());
     }
 
     @Transactional
     public DireccionDTO update(DireccionDTO direccionDTO) {
-        Direccion direccion = repository.findById(direccionDTO.getId())
+        Direccion direccion = direccionRepository.findById(direccionDTO.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Direccion not found"));
         modelMapper.map(direccionDTO, direccion);
-        return modelMapper.map(repository.save(direccion), DireccionDTO.class);
+        return modelMapper.map(direccionRepository.save(direccion), DireccionDTO.class);
     }
 
     @Transactional
-    public void delete(String idDireccion) {
-        if (repository.existsById(UUID.fromString(idDireccion))) {
-            repository.deleteById(UUID.fromString(idDireccion));
-        } else {
-            throw new ResourceNotFoundException("Direccion not found");
-        }
+    public void delete(DireccionDTO direccionDTO) {
+        Direccion direccion = modelMapper.map(direccionDTO, Direccion.class);
+        direccionRepository.delete(direccion);
     }
 
 }

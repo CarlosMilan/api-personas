@@ -18,7 +18,6 @@ import java.util.List;
 @AllArgsConstructor
 public class DireccionController {
 
-    //CRUD Direcciones y obtener por id_persona
     private final DireccionesService direccionesService;
 
     @GetMapping(value = "/{idPersona}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -39,10 +38,10 @@ public class DireccionController {
         return new ResponseEntity<>(direccionesService.update(direccionDTO), HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> delete(@PathVariable String id) {
-        log.info("Delete: " + id);
-        direccionesService.delete(id);
+    @DeleteMapping
+    public ResponseEntity<Void> delete(@Valid @RequestBody DireccionDTO direccionDTO) {
+        log.info("Delete: " + direccionDTO);
+        direccionesService.delete(direccionDTO);
         return ResponseEntity.noContent().build();
     }
 }
