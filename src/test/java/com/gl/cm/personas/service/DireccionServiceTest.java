@@ -10,11 +10,14 @@ import com.gl.cm.personas.model.Provincia;
 import com.gl.cm.personas.repository.DireccionesRepository;
 import com.gl.cm.personas.repository.PersonaRepository;
 import com.gl.cm.personas.repository.ProvinciaRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,20 +26,25 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @DisplayName("Tests Direccion Service")
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class DireccionServiceTest {
 
-    @MockBean
+    @Mock
     private DireccionesRepository direccionesRepository;
 
-    @MockBean
+    @Mock
     private PersonaRepository personaRepository;
 
-    @MockBean
+    @Mock
     private ProvinciaRepository provinciaRepository;
 
-    @Autowired
-    private DireccionesService direccionesService;
+    @InjectMocks
+    private DireccionesServiceImpl direccionesService;
+
+    @BeforeEach
+    void setUp() {
+        direccionesService = new DireccionesServiceImpl(direccionesRepository, provinciaRepository, personaRepository, new ModelMapper());
+    }
 
     @Test
     @DisplayName("Obtener direcciones por id de persona")
@@ -131,8 +139,6 @@ class DireccionServiceTest {
         provincia.setId(direccionDTO.getProvincia().getId());
 
         when(personaRepository.findById(direccionDTO.getPersona().getId())).thenReturn(Optional.empty());
-        when(provinciaRepository.findById(direccionDTO.getProvincia().getId())).thenReturn(Optional.of(provincia));
-        when(direccionesRepository.save(any())).thenReturn(Datos.createDireccion());
 
         ResourceNotFoundException ex = assertThrows(ResourceNotFoundException.class, () -> direccionesService.save(direccionDTO));
 
@@ -151,7 +157,6 @@ class DireccionServiceTest {
 
         when(personaRepository.findById(direccionDTO.getPersona().getId())).thenReturn(Datos.createPersona1());
         when(provinciaRepository.findById(direccionDTO.getProvincia().getId())).thenReturn(Optional.empty());
-        when(direccionesRepository.save(any())).thenReturn(Datos.createDireccion());
 
         ResourceNotFoundException ex = assertThrows(ResourceNotFoundException.class, () -> direccionesService.save(direccionDTO));
 
@@ -202,13 +207,7 @@ class DireccionServiceTest {
     void editarDireccionTest2() {
 
         when(direccionesRepository.findById(any())).thenReturn(Optional.empty());
-        when(direccionesRepository.save(any())).then(invocation -> {
-            Direccion d = invocation.getArgument(0);
-            d.setCalle("Sarmiento");
-            d.setNumeracion(890);
-            d.getProvincia().setNombre("Santa Fe");
-            return d;
-        });
+
 
         DireccionDTO direccionDTO = Datos.createDireccionDTO();
         direccionDTO.setCalle("Sarmiento");

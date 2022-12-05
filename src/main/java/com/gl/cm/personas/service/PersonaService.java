@@ -10,5 +10,5 @@ public interface PersonaService {
     PersonaDTO findById(UUID id);
     PersonaDTO savePersona(PersonaDTO personaDTO);
     PersonaDTO updatePersona(PersonaDTO personaDTO);
-    void delete(UUID id);
+    void delete(PersonaDTO personaDTO);
 }

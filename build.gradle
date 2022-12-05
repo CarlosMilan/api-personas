@@ -28,6 +28,7 @@ dependencies {
 	implementation 'org.modelmapper:modelmapper:3.1.0'
 	//runtimeOnly 'com.h2database:h2'
 	implementation 'org.postgresql:postgresql:42.5.1'
+	implementation 'org.springframework.cloud:spring-cloud-starter-config:3.1.5'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
@@ -35,10 +36,4 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-jacocoTestReport {
-	reports {
-		xml.required = false
-		csv.required = false
-		html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
-	}
-}
+apply from: 'coverage.gradle'

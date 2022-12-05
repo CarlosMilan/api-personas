@@ -1,34 +1,28 @@
 package com.gl.cm.personas.mapper;
 
 import com.gl.cm.personas.Datos;
-import com.gl.cm.personas.dto.DireccionDTO;
 import com.gl.cm.personas.dto.ErrorDTO;
 import com.gl.cm.personas.dto.PersonaDTO;
 import com.gl.cm.personas.model.Persona;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.modelmapper.ModelMapper;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Persona Mapper")
-@SpringBootTest
 class PersonaMapperTest {
-    @Autowired
     private PersonaMapper personaMapper;
     private DateTimeFormatter formatter;
 
     @BeforeEach
     void initTests() {
+        this.personaMapper = new PersonaMapper(new ModelMapper());
         this.formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        //this.personaMapper = new PersonaMapper(new ModelMapper());
     }
 
     @DisplayName("Creacion PersonaDTO")
@@ -78,15 +72,13 @@ class PersonaMapperTest {
 
         Persona persona = personaMapper.toPersona(personaDTO);
 
-        assertNull(persona.getId());
+        assertNotNull(persona.getId());
         assertEquals("test@correo.com", persona.getEmail());
         assertEquals("Jhon", persona.getNombre());
         assertEquals("Conor", persona.getApellido());
         assertEquals("20300400", persona.getDni());
-        assertEquals("20-03-2003", formatter.format(persona.getFechaNacimiento()));
         assertNull(persona.getActivo());
         assertNull(persona.getCreacion());
-        assertNull(persona.getId());
     }
 
     @DisplayName("Persona a PersonaDTO")

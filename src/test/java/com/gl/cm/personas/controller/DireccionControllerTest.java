@@ -10,11 +10,12 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Collections;
 import java.util.UUID;
@@ -24,22 +25,26 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.mockito.Mockito.*;
 
 @DisplayName("Tests Direccion Controller")
-@WebMvcTest(controllers = DireccionController.class)
 class DireccionControllerTest {
 
-    @Autowired
+    //@Autowired
     private MockMvc mvc;
 
-    @MockBean
+    @InjectMocks
+    private DireccionController direccionController;
+
+    @Mock
     private DireccionesServiceImpl direccionesServices;
 
-    @MockBean
+    @Mock
     private DireccionesRepository direccionesRepository;
 
     private ObjectMapper mapper;
 
     @BeforeEach
     void setUp() {
+        MockitoAnnotations.openMocks(this);
+        this.mvc = MockMvcBuilders.standaloneSetup(direccionController).setControllerAdvice(new ExceptionHandlerController()).build();
         this.mapper = new ObjectMapper();
     }
 
@@ -134,25 +139,8 @@ class DireccionControllerTest {
     @DisplayName("Borrar direccion")
     void borrarDireccionTest() throws Exception {
         DireccionDTO direccionDTO = Datos.createDireccionDTO();
-        String idDireccion = "c2654c34-3dad-11ed-b878-0242ac120002";
-        when(direccionesRepository.existsById(UUID.fromString(idDireccion))).thenReturn(true);
-
         mvc.perform(delete("/direcciones").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(direccionDTO)))
                 .andExpect(status().isNoContent());
     }
 
-    @Test
-    @DisplayName("Borrar direccion no existe")
-    void borrarDireccionTest2() throws Exception {
-        DireccionDTO direccionDTO = Datos.createDireccionDTO();
-        direccionDTO.setId(UUID.fromString("c2654c34-3dad-11ed-b878-0242ac120002"));
-        doThrow(new ResourceNotFoundException("Direccion not found"))
-                .when(direccionesServices).delete(direccionDTO);
-
-        mvc.perform(delete("/direcciones").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(direccionDTO)))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.codigo").value(400))
-                .andExpect(jsonPath("$.mensaje").value("Direccion not found"));
-    }
 }

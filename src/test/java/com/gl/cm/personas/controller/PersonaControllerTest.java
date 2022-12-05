@@ -9,12 +9,13 @@ import com.gl.cm.personas.service.PersonaServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.hamcrest.Matchers;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.UUID;
 
@@ -23,22 +24,27 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.mockito.Mockito.*;
 
 @DisplayName("Persona Controller Test")
-@WebMvcTest(controllers = PersonaController.class)
 class PersonaControllerTest {
 
-    @Autowired
     private MockMvc mvc;
 
-    @MockBean
+    @Mock
     private PersonaServiceImpl personaService;
 
-    @MockBean
+    @InjectMocks
+    private PersonaController personaController;
+
+    @Mock
     private PersonaRepository personaRepository;
 
     private ObjectMapper mapper;
 
     @BeforeEach
     void setUp() {
+        MockitoAnnotations.openMocks(this);
+        this.mvc = MockMvcBuilders.standaloneSetup(personaController)
+                .setControllerAdvice(new ExceptionHandlerController())
+                .build();
         this.mapper = new ObjectMapper();
     }
 
@@ -134,23 +140,12 @@ class PersonaControllerTest {
     @Test
     @DisplayName("Borrar Persona")
     void deletePersona() throws Exception {
+        PersonaDTO personaDTO = Datos.createPersonaDTO1();
         when(personaRepository.existsById(UUID.fromString("c2654c34-3dad-11ed-b878-0242ac120002"))).thenReturn(true);
 
-        mvc.perform(delete("/personas/c2654c34-3dad-11ed-b878-0242ac120002"))
+        mvc.perform(delete("/personas").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsString(personaDTO)))
                 .andExpect(status().isNoContent());
     }
 
-    @Test
-    @DisplayName("Borrar Persona no existente")
-    void deletePersonaNotFound() throws Exception {
-        doThrow(new ResourceNotFoundException("Persona not found"))
-                .when(personaService).delete(any());
-
-        mvc.perform(delete("/personas/c2654c34-3dad-11ed-b878-0242ac120002"))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.codigo").value(400))
-                .andExpect(jsonPath("$.mensaje").value("Persona not found"));
-    }
 
 }

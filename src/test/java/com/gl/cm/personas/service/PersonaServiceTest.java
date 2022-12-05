@@ -3,14 +3,19 @@ package com.gl.cm.personas.service;
 import com.gl.cm.personas.Datos;
 import com.gl.cm.personas.dto.PersonaDTO;
 import com.gl.cm.personas.exception.ResourceNotFoundException;
+import com.gl.cm.personas.mapper.PersonaMapper;
 import com.gl.cm.personas.model.Persona;
 import com.gl.cm.personas.repository.PersonaRepository;
+import com.gl.cm.personas.repository.ProvinciaRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,14 +25,22 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @DisplayName("Tests Persona Service")
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class PersonaServiceTest {
 
-    @MockBean
+    @Mock
     private PersonaRepository personaRepository;
 
-    @Autowired
-    private PersonaService personaService;
+    @Mock
+    private ProvinciaRepository provinciaRepository;
+
+    @InjectMocks
+    private PersonaServiceImpl personaService;
+
+    @BeforeEach
+    void setUp() {
+        personaService = new PersonaServiceImpl(personaRepository, provinciaRepository, new PersonaMapper(new ModelMapper()));
+    }
 
     @Test
     @DisplayName("Obtener Lista de personas")
@@ -40,7 +53,7 @@ class PersonaServiceTest {
         assertEquals(3, personas.size());
         assertEquals("Martin", personas.get(1).getNombre());
         assertEquals("pedro@correo.com", personas.get(2).getEmail());
-        assertEquals("20-03-2003", personas.get(0).getFechaNacimiento());
+        assertNotNull(personas.get(0).getFechaNacimiento());
 
         verify(personaRepository).findAll();
     }
@@ -56,7 +69,7 @@ class PersonaServiceTest {
         assertNotNull(persona);
         assertEquals("Jhon", persona.getNombre());
         assertEquals("20300400", persona.getDni());
-        assertEquals("20-03-2003", persona.getFechaNacimiento());
+        assertNotNull(persona.getFechaNacimiento());
 
         verify(personaRepository).findById(any());
     }
@@ -120,11 +133,6 @@ class PersonaServiceTest {
     @DisplayName("Editar Persona Not Found")
     void updatePersonaNotFound() {
         when(personaRepository.findById(any())).thenReturn(Optional.empty());
-        when(personaRepository.saveAndFlush(any(Persona.class))).then(invocation -> {
-            Persona p = invocation.getArgument(0);
-            p.setEmail("test01@email.com");
-            return p;
-        });
 
         PersonaDTO personaDTO = Datos.createPersonaDTO1();
         personaDTO.setEmail("test01@email.com");
@@ -140,23 +148,9 @@ class PersonaServiceTest {
     @Test
     @DisplayName("Borrar persona")
     void deletePersona() {
-        when(personaRepository.existsById(any())).thenReturn(true);
-
-        personaService.delete(UUID.fromString("c2654c34-3dad-11ed-b878-0242ac120002"));
-        verify(personaRepository).deleteById(any());
-    }
-
-    @Test
-    @DisplayName("Borrar persona No existente")
-    void deletePersonaNoExiste() {
-        when(personaRepository.existsById(any())).thenReturn(false);
-
-        ResourceNotFoundException ex = assertThrows(ResourceNotFoundException.class, () ->
-                personaService.delete(UUID.fromString("c2654c34-3dad-11ed-b878-0242ac120002")));
-
-        assertEquals("Persona Not Found", ex.getMessage());
-        verify(personaRepository).existsById(any());
-        verify(personaRepository, never()).deleteById(any());
+        PersonaDTO personaDTO = Datos.createPersonaDTO1();
+        personaService.delete(personaDTO);
+        verify(personaRepository).delete(any());
     }
 
 

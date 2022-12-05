@@ -64,13 +64,9 @@ public class PersonaServiceImpl implements PersonaService{
     }
 
     @Transactional
-    public void delete(UUID id) {
+    public void delete(PersonaDTO personaDTO) {
+        Persona persona = personaMapper.toPersona(personaDTO);
+        personaRepository.delete(persona);
 
-        if (personaRepository.existsById(id)) {
-            log.info("Eliminando persona con id: {}", id);
-            personaRepository.deleteById(id);
-        } else {
-            throw new ResourceNotFoundException("Persona Not Found");
-        }
     }
 }

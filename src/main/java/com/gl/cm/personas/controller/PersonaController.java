@@ -49,10 +49,10 @@ public class PersonaController {
         return new ResponseEntity<>(persona, HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> delete(@PathVariable(name = "id") String id) {
-        log.info("Delete:  " + id);
-        personaService.delete(UUID.fromString(id));
+    @DeleteMapping()
+    public ResponseEntity<Void> delete(@Valid @RequestBody PersonaDTO personaDTO) {
+        log.info("Delete:  " + personaDTO);
+        personaService.delete(personaDTO);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

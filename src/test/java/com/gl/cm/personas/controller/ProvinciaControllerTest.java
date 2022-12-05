@@ -3,13 +3,15 @@ package com.gl.cm.personas.controller;
 import com.gl.cm.personas.Datos;
 import com.gl.cm.personas.service.ProvinciaServiceImpl;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -17,15 +19,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.mockito.Mockito.*;
 
 @DisplayName("Tests Provincia Controller")
-@WebMvcTest(controllers = ProvinciaController.class)
 class ProvinciaControllerTest {
 
-    @Autowired
     private MockMvc mvc;
 
-    @MockBean
+    @InjectMocks
+    private ProvinciaController provinciaController;
+
+    @Mock
     private ProvinciaServiceImpl provinciaService;
 
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        this.mvc = MockMvcBuilders.standaloneSetup(provinciaController).build();
+    }
     @Test
     @DisplayName("Obtener todas las provincias")
     void getProvinciasTest() throws Exception{
